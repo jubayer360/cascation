@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CaseCation 2.0 Registration Form</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0C1069, #3f51b5);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+      color: #333;
+    }
+    form {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.1),
+        0 8px 20px rgba(12, 16, 105, 0.25);
+      max-width: 900px;
+      width: 100%;
+      padding: 40px 50px;
+      overflow: hidden;
+      transition: box-shadow 0.3s ease;
+    }
+    form:hover {
+      box-shadow:
+        0 6px 16px rgba(0,0,0,0.15),
+        0 12px 40px rgba(12, 16, 105, 0.4);
+    }
+
+    h2 {
+      text-align: center;
+      font-weight: 700;
+      color: #0C1069;
+      margin-bottom: 40px;
+      font-size: 2.8rem;
+      letter-spacing: 1px;
+      text-shadow: 0 0 6px rgba(12,16,105,0.3);
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #3f51b5;
+      margin: 30px 0 15px;
+      border-bottom: 2px solid #3f51b5;
+      padding-bottom: 6px;
+      letter-spacing: 0.8px;
+      user-select: none;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      margin-top: 18px;
+      color: #444;
+      user-select: none;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    select {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1.8px solid #bbb;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      color: #222;
+      box-shadow: inset 0 1px 3px #ddd;
+      outline-offset: 2px;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    select:focus {
+      border-color: #3f51b5;
+      box-shadow: 0 0 8px #3f51b5aa;
+      outline: none;
+    }
+
+    /* Remove browser default invalid styles */
+    input:invalid, select:invalid {
+      border-color: initial;
+      box-shadow: none;
+    }
+
+    /* Red border only if .error class added */
+    input.error, select.error {
+      border-color: #e74c3c !important;
+      box-shadow: 0 0 5px #e74c3c88 !important;
+    }
+
+    .checkbox {
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      user-select: none;
+      color: #222;
+    }
+    .checkbox input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: #3f51b5;
+      border-radius: 4px;
+      border: 1.5px solid #999;
+      transition: border-color 0.3s ease;
+    }
+    .checkbox input[type="checkbox"]:focus {
+      border-color: #3f51b5;
+      outline: none;
+      box-shadow: 0 0 8px #3f51b5aa;
+    }
+
+    button {
+      margin-top: 40px;
+      width: 100%;
+      padding: 15px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(90deg, #0C1069, #3f51b5);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.4s ease;
+      box-shadow: 0 4px 12px #3f51b5aa;
+      user-select: none;
+      position: relative;
+      overflow: hidden;
+    }
+    button:hover:not(.loading) {
+      background: linear-gradient(90deg, #3f51b5, #0C1069);
+      box-shadow: 0 6px 20px #0C1069cc;
+    }
+
+    @keyframes spinner {
+      to { transform: rotate(360deg); }
+    }
+    button.loading {
+      pointer-events: none;
+      color: transparent;
+    }
+    button.loading::after {
+      content: "";
+      box-sizing: border-box;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      margin-top: -10px;
+      margin-left: -10px;
+      border-radius: 50%;
+      border: 3px solid white;
+      border-top-color: transparent;
+      animation: spinner 0.6s linear infinite;
+    }
+
+    .success {
+      margin-top: 25px;
+      padding: 18px 20px;
+      border-radius: 12px;
+      background-color: #dff0d8;
+      color: #3c763d;
+      font-weight: 700;
+      text-align: center;
+      font-size: 1.15rem;
+      box-shadow: 0 2px 8px #3c763d44;
+      user-select: none;
+      display: none;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-weight: 600;
+      margin-top: 15px;
+      text-align: center;
+      user-select: none;
+      display: none;
+    }
+
+    .grid-two-cols {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px 30px;
+      margin-top: 10px;
+    }
+
+    .team-leader-info,
+    .member-info {
+      margin-bottom: 25px;
+    }
+
+    label[for*="Optional"]::after {
+      content: " (Optional)";
+      font-weight: 400;
+      font-style: italic;
+      color: #999;
+      font-size: 0.85rem;
+      margin-left: 4px;
+      user-select: none;
+    }
+
+    @media (max-width: 600px) {
+      form {
+        padding: 30px 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<form id="registrationForm" novalidate>
+  <h2>CaseCation 2.0 Registration</h2>
+
+  <div class="team-leader-info">
+    <label for="teamName">Team Name *</label>
+    <input id="teamName" name="Team Name" type="text" required autocomplete="off" />
+
+    <label for="teamLeaderFullName">Team Leader's Full Name *</label>
+    <input id="teamLeaderFullName" name="Team Leader's Full Name" type="text" required autocomplete="off" />
+
+    <label for="teamLeaderUniversity">Team Leader's University Name *</label>
+    <input id="teamLeaderUniversity" name="Team Leader's University Name" type="text" required autocomplete="off" />
+
+    <label for="teamLeaderDepartment">Team Leader's Department & Year *</label>
+    <input id="teamLeaderDepartment" name="Team Leader's Department & Year" type="text" required autocomplete="off" />
+
+    <label for="teamLeaderPhone">Team Leader's Phone Number *</label>
+    <input id="teamLeaderPhone" name="Team Leader's Phone Number" type="text" required autocomplete="off" pattern="\+?\d{7,15}" title="Please enter a valid phone number" />
+
+    <label for="teamLeaderEmail">Team Leader's Email Address *</label>
+    <input id="teamLeaderEmail" name="Team Leader's Email Address" type="email" required autocomplete="off" />
+  </div>
+
+  <div class="section-title">Member 2 Information</div>
+  <div class="member-info grid-two-cols">
+    <div>
+      <label for="member2FullName">Full Name *</label>
+      <input id="member2FullName" name="Member 2 - Full Name" type="text" required autocomplete="off" />
+    </div>
+    <div>
+      <label for="member2Phone">Phone Number *</label>
+      <input id="member2Phone" name="Member 2 - Phone Number" type="text" required autocomplete="off" pattern="\+?\d{7,15}" title="Please enter a valid phone number" />
+    </div>
+    <div>
+      <label for="member2Email">Email Address *</label>
+      <input id="member2Email" name="Member 2 - Email Address" type="email" required autocomplete="off" />
+    </div>
+    <div>
+      <label for="member2University">University Name *</label>
+      <input id="member2University" name="Member 2 - University Name" type="text" required autocomplete="off" />
+    </div>
+    <div style="grid-column: 1 / -1;">
+      <label for="member2DeptYear">Department & Year *</label>
+      <input id="member2DeptYear" name="Member 2 - Department & Year" type="text" required autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="section-title">Member 3 Information (Optional)</div>
+  <div class="member-info grid-two-cols">
+    <div>
+      <label for="member3FullName">Full Name</label>
+      <input id="member3FullName" name="Member 3 - Full Name (Optional)" type="text" autocomplete="off" />
+    </div>
+    <div>
+      <label for="member3Phone">Phone Number</label>
+      <input id="member3Phone" name="Member 3 - Phone Number (Optional)" type="text" autocomplete="off" pattern="\+?\d{7,15}" title="Please enter a valid phone number" />
+    </div>
+    <div>
+      <label for="member3Email">Email Address</label>
+      <input id="member3Email" name="Member 3 - Email Address (Optional)" type="email" autocomplete="off" />
+    </div>
+    <div>
+      <label for="member3University">University Name</label>
+      <input id="member3University" name="Member 3 - University Name (Optional)" type="text" autocomplete="off" />
+    </div>
+    <div style="grid-column: 1 / -1;">
+      <label for="member3DeptYear">Department & Year</label>
+      <input id="member3DeptYear" name="Member 3 - Department & Year (Optional)" type="text" autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="section-title">Member 4 Information (Optional)</div>
+  <div class="member-info grid-two-cols">
+    <div>
+      <label for="member4FullName">Full Name</label>
+      <input id="member4FullName" name="Member 4 - Full Name (Optional)" type="text" autocomplete="off" />
+    </div>
+    <div>
+      <label for="member4Phone">Phone Number</label>
+      <input id="member4Phone" name="Member 4 - Phone Number (Optional)" type="text" autocomplete="off" pattern="\+?\d{7,15}" title="Please enter a valid phone number" />
+    </div>
+    <div>
+      <label for="member4Email">Email Address</label>
+      <input id="member4Email" name="Member 4 - Email Address (Optional)" type="email" autocomplete="off" />
+    </div>
+    <div>
+      <label for="member4University">University Name</label>
+      <input id="member4University" name="Member 4 - University Name (Optional)" type="text" autocomplete="off" />
+    </div>
+    <div style="grid-column: 1 / -1;">
+      <label for="member4DeptYear">Department & Year</label>
+      <input id="member4DeptYear" name="Member 4 - Department & Year (Optional)" type="text" autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="section-title">Payment Information</div>
+  <div class="member-info grid-two-cols">
+    <div>
+      <label for="paymentMethod">Method of Payment *</label>
+      <select id="paymentMethod" name="Method of Payment" required>
+        <option value="" disabled selected>-- Select Method --</option>
+        <option value="Bkash">Bkash</option>
+        <option value="Nagad">Nagad</option>
+        <option value="Rocket">Rocket</option>
+      </select>
+    </div>
+    <div>
+      <label for="paymentNumber">Number Used for Payment *</label>
+      <input id="paymentNumber" name="Number Used for Payment" type="text" required autocomplete="off" pattern="\+?\d{7,15}" title="Please enter a valid phone number" />
+    </div>
+    <div>
+      <label for="sendMoneyTo">Send Money To *</label>
+      <select id="sendMoneyTo" name="Send Money To" required>
+        <option value="" disabled selected>-- Select Number --</option>
+        <option value="01888433887">01888433887</option>
+        <option value="01777861492">01777861492</option>
+      </select>
+    </div>
+    <div>
+      <label for="transactionId">Transaction ID (for payment confirmation) *</label>
+      <input id="transactionId" name="Transaction ID (for payment confirmation)" type="text" required autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="checkbox">
+    <input type="checkbox" id="confirmation" name="Confirmation" value="Confirmed" required />
+    <label for="confirmation">I confirm that all information provided is correct, the registration fee has been paid, and I agree to abide by all rules of CaseCation 2.0 *</label>
+  </div>
+
+  <!-- Inline error message for form validation -->
+  <div class="error-message" id="errorMsg">Please fill all required fields correctly before submitting.</div>
+
+  <button type="submit">Submit Registration</button>
+
+  <div class="success" id="successMsg">Thank you! Your registration has been recorded.</div>
+</form>
+
+<script>
+  const form = document.getElementById("registrationForm");
+  const submitBtn = form.querySelector("button[type='submit']");
+  const successMsg = document.getElementById("successMsg");
+  const errorMsg = document.getElementById("errorMsg");
+
+  // Add or remove red border on invalid/valid fields
+  function validateField(field) {
+    if (!field.checkValidity()) {
+      field.classList.add("error");
+    } else {
+      field.classList.remove("error");
+    }
+  }
+
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let invalidFound = false;
+    const fields = form.querySelectorAll("input, select");
+    fields.forEach(field => {
+      validateField(field);
+      if (!field.checkValidity()) {
+        if (!invalidFound) {
+          field.focus();
+          invalidFound = true;
+        }
+      }
+    });
+
+    if (invalidFound) {
+      errorMsg.style.display = "block";
+      successMsg.style.display = "none";
+      return;
+    } else {
+      errorMsg.style.display = "none";
+    }
+
+    // proceed with submission
+    submitBtn.classList.add("loading");
+    submitBtn.textContent = "Submitting...";
+
+    const formData = new FormData(form);
+
+    fetch("https://script.google.com/macros/s/AKfycbx0IQqA3UZF6Ju4I9s6jycy0CXNTNBJVzhc8vDr7coP9n9g6TMkxOrh1_4CtFk5JKMP/exec", {
+      method: "POST",
+      body: formData
+    })
+    .then(response => {
+      if (response.ok) {
+        form.reset();
+        successMsg.style.display = "block";
+        successMsg.scrollIntoView({ behavior: 'smooth' });
+        // Clear error borders after reset
+        fields.forEach(f => f.classList.remove("error"));
+      } else {
+        alert("Submission failed. Please try again.");
+      }
+    })
+    .catch(error => {
+      alert("Error: " + error.message);
+    })
+    .finally(() => {
+      submitBtn.classList.remove("loading");
+      submitBtn.textContent = "Submit Registration";
+    });
+  });
+
+  // Remove error styling on user input/change
+  const fields = form.querySelectorAll("input, select");
+  fields.forEach(field => {
+    field.addEventListener("input", () => validateField(field));
+    field.addEventListener("change", () => validateField(field));
+  });
+</script>
+
+</body>
+</html>
